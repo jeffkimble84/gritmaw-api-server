@@ -1,5 +1,6 @@
 [phases.setup]
-cmds = ["npm install"]
+nixPkgs = ["nodejs-18_x", "npm"]
+cmds = ["npm ci --legacy-peer-deps"]
 
 [phases.build]
 cmds = ["npm run build"]
@@ -9,3 +10,4 @@ cmd = "npm start"
 
 [variables]
 NODE_ENV = "production"
+SKIP_ENV_VALIDATION = "true"
