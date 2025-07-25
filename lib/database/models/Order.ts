@@ -150,7 +150,7 @@ OrderSchema.methods.update = async function(updates: Partial<IOrder>): Promise<I
   
   for (const key of updateKeys) {
     if (allowedUpdates.includes(key)) {
-      this[key] = updates[key]
+      (this as any)[key] = (updates as any)[key]
     }
   }
   

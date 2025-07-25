@@ -94,7 +94,7 @@ export async function GET(request: NextRequest) {
       totalBacktests: backtests.length,
       totalOptimizations: optimizations.length,
       averageReturn: backtests.length > 0 
-        ? backtests.reduce((sum, b) => sum + (b.metrics.totalReturnPercent || 0), 0) / backtests.length
+        ? backtests.reduce((sum, b) => sum + (b.metrics.totalReturn || 0), 0) / backtests.length
         : 0,
       averageSharpeRatio: backtests.length > 0
         ? backtests.reduce((sum, b) => sum + (b.metrics.sharpeRatio || 0), 0) / backtests.length
@@ -109,8 +109,8 @@ export async function GET(request: NextRequest) {
         strategyName: h.strategyName,
         date: h.createdAt,
         result: h.type === 'BACKTEST' 
-          ? `${h.metrics.totalReturnPercent?.toFixed(1)}% return`
-          : `${(h.summary as any).optimizationMetric || 'parameter'} optimization`
+          ? `${h.metrics.totalReturn?.toFixed(1)}% return`
+          : `${(h as any).summary?.optimizationMetric || 'parameter'} optimization`
       }))
     }
 
@@ -121,12 +121,12 @@ export async function GET(request: NextRequest) {
           ...h,
           metrics: h.metrics ? {
             totalReturn: h.metrics.totalReturn ? Number(h.metrics.totalReturn.toFixed(2)) : 0,
-            totalReturnPercent: h.metrics.totalReturnPercent ? Number(h.metrics.totalReturnPercent.toFixed(2)) : 0,
+            totalReturnPercent: h.metrics.totalReturn ? Number(h.metrics.totalReturn.toFixed(2)) : 0,
             sharpeRatio: h.metrics.sharpeRatio ? Number(h.metrics.sharpeRatio.toFixed(3)) : 0,
             maxDrawdown: h.metrics.maxDrawdown ? Number(h.metrics.maxDrawdown.toFixed(2)) : 0,
             totalTrades: h.metrics.totalTrades || 0,
             winRate: h.metrics.winRate ? Number(h.metrics.winRate.toFixed(1)) : 0,
-            volatility: h.metrics.volatility ? Number(h.metrics.volatility.toFixed(2)) : 0
+            profitFactor: h.metrics.profitFactor ? Number(h.metrics.profitFactor.toFixed(2)) : 0
           } : null
         })),
         pagination: {

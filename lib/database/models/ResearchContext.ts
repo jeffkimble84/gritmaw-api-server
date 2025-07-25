@@ -299,7 +299,7 @@ ResearchContextSchema.methods.recordSnapshot = async function() {
     cutoffDate.setDate(cutoffDate.getDate() - this.metadata.retentionPolicy.historyDays);
     
     this.history.snapshots = this.history.snapshots.filter(
-      snapshot => snapshot.timestamp > cutoffDate
+      (snapshot: { timestamp: Date }) => snapshot.timestamp > cutoffDate
     );
   }
   
@@ -345,8 +345,8 @@ ResearchContextSchema.methods.recordOutcome = async function(
 ) {
   // Find the most recent application of this pattern
   const application = this.history.patternApplications
-    .filter(app => app.patternId === patternId && !app.outcome)
-    .sort((a, b) => b.appliedAt.getTime() - a.appliedAt.getTime())[0];
+    .filter((app: IPatternApplication) => app.patternId === patternId && !app.outcome)
+    .sort((a: IPatternApplication, b: IPatternApplication) => b.appliedAt.getTime() - a.appliedAt.getTime())[0];
   
   if (application) {
     application.outcome = {
@@ -378,7 +378,7 @@ ResearchContextSchema.methods.recordOutcome = async function(
 };
 
 ResearchContextSchema.methods.updatePerformanceMetrics = async function() {
-  const applications = this.history.patternApplications.filter(app => app.outcome);
+  const applications = this.history.patternApplications.filter((app: IPatternApplication) => app.outcome);
   
   if (applications.length === 0) {
     this.history.performanceMetrics = {
@@ -389,8 +389,8 @@ ResearchContextSchema.methods.updatePerformanceMetrics = async function() {
     return;
   }
   
-  const successes = applications.filter(app => app.outcome.success).length;
-  const totalImpact = applications.reduce((sum, app) => sum + app.outcome.impact, 0);
+  const successes = applications.filter((app: IPatternApplication) => app.outcome!.success).length;
+  const totalImpact = applications.reduce((sum: number, app: IPatternApplication) => sum + app.outcome!.impact, 0);
   
   this.history.performanceMetrics.successRate = successes / applications.length;
   this.history.performanceMetrics.avgImpact = totalImpact / applications.length;
@@ -400,8 +400,8 @@ ResearchContextSchema.methods.updatePerformanceMetrics = async function() {
   const olderApps = applications.slice(0, -10);
   
   if (olderApps.length > 0) {
-    const recentAvgConfidence = recentApps.reduce((sum, app) => sum + app.confidence, 0) / recentApps.length;
-    const olderAvgConfidence = olderApps.reduce((sum, app) => sum + app.confidence, 0) / olderApps.length;
+    const recentAvgConfidence = recentApps.reduce((sum: number, app: IPatternApplication) => sum + app.confidence, 0) / recentApps.length;
+    const olderAvgConfidence = olderApps.reduce((sum: number, app: IPatternApplication) => sum + app.confidence, 0) / olderApps.length;
     
     this.history.performanceMetrics.learningProgress = Math.max(0, Math.min(1,
       (recentAvgConfidence - olderAvgConfidence) / olderAvgConfidence

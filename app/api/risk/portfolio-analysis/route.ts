@@ -165,7 +165,7 @@ export async function GET(request: NextRequest) {
           percentage: Number(p.percentage.toFixed(2)),
           unrealizedPnL: Number(p.unrealizedPnL.toFixed(2)),
           unrealizedPnLPercent: Number(p.unrealizedPnLPercent.toFixed(2)),
-          stopLossDistance: p.stopLossDistance ? Number(p.stopLossDistance.toFixed(2)) : null
+          stopLossDistance: p.stopLossDistance ? Number((p.stopLossDistance as number).toFixed(2)) : null
         })),
         sectorAnalysis: Object.entries(sectorAnalysis)
           .map(([sector, data]) => ({

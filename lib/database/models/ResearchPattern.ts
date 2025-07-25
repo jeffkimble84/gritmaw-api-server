@@ -450,17 +450,17 @@ ResearchPatternSchema.methods.updateAggregateMetrics = async function() {
   const observations = this.performance.observations;
   if (observations.length === 0) return;
   
-  const accuracies = observations.map(obs => obs.accuracy);
+  const accuracies = observations.map((obs: IPerformanceObservation) => obs.accuracy);
   this.performance.aggregateMetrics.avgAccuracy = 
-    accuracies.reduce((a, b) => a + b, 0) / accuracies.length;
+    accuracies.reduce((a: number, b: number) => a + b, 0) / accuracies.length;
   
   // Calculate success rate (accuracy > 0.5)
   this.performance.aggregateMetrics.successRate = 
-    accuracies.filter(acc => acc > 0.5).length / accuracies.length;
+    accuracies.filter((acc: number) => acc > 0.5).length / accuracies.length;
   
   // Calculate volatility (standard deviation)
   const mean = this.performance.aggregateMetrics.avgAccuracy;
-  const variance = accuracies.reduce((sum, acc) => sum + Math.pow(acc - mean, 2), 0) / accuracies.length;
+  const variance = accuracies.reduce((sum: number, acc: number) => sum + Math.pow(acc - mean, 2), 0) / accuracies.length;
   this.performance.aggregateMetrics.volatility = Math.sqrt(variance);
 };
 

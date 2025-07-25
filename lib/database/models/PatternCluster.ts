@@ -249,7 +249,7 @@ PatternClusterSchema.index({ 'performance.successRate': -1 });
 
 // Instance methods
 PatternClusterSchema.methods.addMember = async function(patternId: string, membershipScore: number) {
-  const existingMember = this.members.find(m => m.patternId === patternId);
+  const existingMember = this.members.find((m: IClusterMember) => m.patternId === patternId);
   
   if (existingMember) {
     existingMember.membershipScore = membershipScore;
@@ -285,7 +285,7 @@ PatternClusterSchema.methods.recalculateClusterMetrics = async function() {
   }
   
   // Calculate average membership score as proxy for cohesion
-  const avgMembership = this.members.reduce((sum, m) => sum + m.membershipScore, 0) / memberCount;
+  const avgMembership = this.members.reduce((sum: number, m: IClusterMember) => sum + m.membershipScore, 0) / memberCount;
   this.quality.cohesion = avgMembership;
   
   // Update confidence based on member count and cohesion

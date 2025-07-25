@@ -236,7 +236,7 @@ TradeSchema.statics.getWinRate = async function(
   
   if (trades.length === 0) return 0
   
-  const winningTrades = trades.filter(t => (t.performance?.profit || 0) > 0)
+  const winningTrades = trades.filter((t: ITrade) => (t.performance?.profit || 0) > 0)
   return (winningTrades.length / trades.length) * 100
 }
 
@@ -255,7 +255,7 @@ TradeSchema.statics.getDailyVolume = async function(
     executedAt: { $gte: startOfDay, $lte: endOfDay }
   })
   
-  return trades.reduce((volume, trade) => volume + (trade.price * trade.quantity), 0)
+  return trades.reduce((volume: number, trade: ITrade) => volume + (trade.price * trade.quantity), 0)
 }
 
 // Export model
