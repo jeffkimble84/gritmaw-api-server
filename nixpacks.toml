@@ -1,11 +1,8 @@
 [phases.setup]
-nixPkgs = ["nodejs-18_x", "npm-9_x"]
-
-[phases.install]
-cmds = ["npm install --production=false"]
+nixPkgs = ["nodejs-18_x", "npm-9_x", "bash"]
 
 [phases.build]
-cmds = ["npm run build"]
+cmds = ["bash scripts/railway-build.sh"]
 
 [start]
 cmd = "npm start"
