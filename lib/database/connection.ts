@@ -11,6 +11,12 @@ if (!MONGODB_URI) {
   console.warn('⚠️ MONGODB_URI not found - database operations will be skipped')
 }
 
+// Validate MongoDB URI format
+if (MONGODB_URI && MONGODB_URI.includes('mongodb+srv://') && MONGODB_URI.includes(':27017')) {
+  console.error('❌ Invalid MongoDB URI: mongodb+srv:// URLs cannot include port numbers')
+  console.error('Remove :27017 from your MONGODB_URI environment variable')
+}
+
 /**
  * Global is used here to maintain a cached connection across hot reloads
  * in development. This prevents connections growing exponentially
